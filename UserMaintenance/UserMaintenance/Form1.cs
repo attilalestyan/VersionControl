@@ -14,6 +14,9 @@ namespace UserMaintenance
     public partial class Form1 : Form
     {
         BindingList<User> users = new BindingList<User>();
+
+        public SaveFileDialog SaveFileDialog { get; private set; }
+
         public Form1()
         {
             InitializeComponent();
@@ -39,6 +42,12 @@ namespace UserMaintenance
                 
             };
             users.Add(u);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            if (sfd.ShowDialog()! = DialogResult.OK) return;
         }
     }
 }
