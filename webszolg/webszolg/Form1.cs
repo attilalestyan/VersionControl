@@ -20,6 +20,12 @@ namespace webszolg
         public Form1()
         {
             InitializeComponent();
+            RefreshData();
+        }
+
+        private void RefreshData()
+        {
+            Rates.Clear();
             GetExchangeRates();
             dataGridView1.DataSource = Rates;
             chartRateData.DataSource = Rates;
@@ -32,9 +38,9 @@ namespace webszolg
 
             var request = new GetExchangeRatesRequestBody()
             {
-                currencyNames = "EUR",
-                startDate = "2020-01-01",
-                endDate = "2020-06-30"
+                currencyNames = (string)comboBox1.SelectedItem,
+                startDate = dateTimePicker1.Value.ToString(),
+                endDate = dateTimePicker2.Value.ToString()
             };
 
             var response = mnbService.GetExchangeRates(request);
@@ -52,6 +58,8 @@ namespace webszolg
                 rate.Date = DateTime.Parse(element.GetAttribute("date"));
 
                 var childElement = (XmlElement)element.ChildNodes[0];
+                //if (childElement == null)
+                //    continue;
                 rate.Currency = childElement.GetAttribute("curr");
 
                 var unit = decimal.Parse(childElement.GetAttribute("unit"));
@@ -59,11 +67,6 @@ namespace webszolg
                 if (unit != 0)
                     rate.Value = value / unit;
             }
-        }
-
-        private void XML()
-        {
-            
         }
 
         private void ShowDiagram()
@@ -86,6 +89,21 @@ namespace webszolg
         private void Form1_Load(object sender, EventArgs e)
         {
             
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
 }
